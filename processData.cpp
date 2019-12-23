@@ -223,6 +223,12 @@ void ProcessRequest(const char* pRequest, void* pData, void* &pOutput, int &N) {
         tmpSL.line_id=line_id;
 
         int count=tmpData->_tStation_line.traverse(find_lineId_stationId,tmp);
+        if (count == 0 && p_i == 0)
+        {
+			tmpData->_tStation_line.insert(0,tmpSL);
+			pOutput=new int(0);
+            return;
+        }
 		if (p_i>count)
 		{
 			pOutput=new int(-1);
