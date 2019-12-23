@@ -84,19 +84,20 @@ void ProcessRequest(const char* pRequest, void* pData, void* &pOutput, int &N) {
     string req=getString(pRequest,' ');
     if (req=="CL")
     {
-        string city_name=pRequest;
-        if (city_name=="")
+        if (*pRequest=='\0')
         {
             pOutput=new int(tmpData->_tLine.getSize());
             return;
         }
-        void * tmp=new string(city_name);
-        tmpData->_tCity.traverse(find_cityName_cityID,tmp);
-        int count=tmpData->_tLine.traverse(find_cityId_lineId,tmp);
-        if (*(int*)tmp==0)
+        void * tmp=new string(pRequest);
+        int count = tmpData->_tCity.traverse(find_cityName_cityID,tmp);
+        if (count == 0)
+        {
             pOutput=new int(-1);
-        else
-            pOutput=new int(count);
+            return;
+        }
+        count = tmpData->_tLine.traverse(find_cityId_lineId,tmp);
+        pOutput=new int(count);
         return;
     }
     if (req=="LSC")
@@ -125,14 +126,24 @@ void ProcessRequest(const char* pRequest, void* pData, void* &pOutput, int &N) {
     if (req=="FC")
     {
         void * tmp=new string(pRequest);//city name
-        tmpData->_tCity.traverse(find_cityName_cityID,tmp);
-		pOutput=tmp;
+        int count = tmpData->_tCity.traverse(find_cityName_cityID,tmp);
+        if (count == 0)
+        {
+            pOutput=new int(-1);
+            return;
+        }
+        pOutput=tmp;
         return;
     }
     if (req=="FS")
     {
         void * tmp=new string(pRequest);//station name
-        N=tmpData->_tStation.traverse(find_stationName_stationId,tmp);
+        int count = tmpData->_tStation.traverse(find_stationName_stationId,tmp);
+        if (count == 0)
+        {
+            pOutput=new int(-1);
+            return;
+        }
         pOutput=tmp;
         return;
     }
@@ -211,20 +222,18 @@ void ProcessRequest(const char* pRequest, void* pData, void* &pOutput, int &N) {
         tmpSL.station_id=station_id;
         tmpSL.line_id=line_id;
 
-        N=tmpData->_tStation_line.traverse(find_lineId_stationId,tmp);
-		if (p_i>N-1)
+        int count=tmpData->_tStation_line.traverse(find_lineId_stationId,tmp);
+		if (p_i>count)
 		{
-			N=1;
 			pOutput=new int(-1);
 			return;
 		}
 		else
 		{
-			for (int i=0;i<N;i++)
+			for (int i=0;i<count;i++)
 			{
 				if (station_id==((int*)tmp)[i])
 				{
-					N=1;
 					pOutput=new int(-1);
 					return;
 				}
@@ -234,9 +243,7 @@ void ProcessRequest(const char* pRequest, void* pData, void* &pOutput, int &N) {
 			int index=tmpData->_tStation_line.findIndex(tmpSL1->id);
 			tmpSL.station_id=station_id;
 			tmpData->_tStation_line.insert(index,tmpSL);
-			N=1;
 			pOutput=new int(0);
-
 		}
         return;
     }

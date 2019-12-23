@@ -111,8 +111,6 @@ public:
                 output[size_output++]=temp;
             tmpCur=tmpCur->pNext;
         }
-		if (size_output==0)
-			output[size_output++]=-1;
         pParam=output;
 		return size_output;
 
@@ -120,6 +118,7 @@ public:
 	void traverseRemove(bool (*op)(T&,int),int id)
     {
         L1Item<T> *pCur = _pHead;
+        L1Item<T> *pPreCur = _pHead;
         while (pCur)
         {
             if (op(pCur->data,id))
@@ -132,14 +131,15 @@ public:
 						removeLast();
 					else
 					{
-						L1Item<T> *pTmp=pCur->pNext;
-						pCur->pNext=pCur->pNext->pNext;
-						delete pTmp;
+						L1Item<T> *pTmp=pPreCur->pNext;
+						pPreCur->pNext=pPreCur->pNext->pNext;
 						_size--;
-						cout << id << '\n';
+						pCur=pPreCur->pNext;
+						continue;
 					}
 				}
 			}
+			pPreCur=pCur;
             pCur=pCur->pNext;
         }
     }
@@ -234,7 +234,7 @@ int L1List<T>::insert(int i, T& a)
     }
     L1Item<T> *pNew= new L1Item<T>(a);
     L1Item<T> *pCur=_pHead;
-    for (int j=1; j<i-1; j++)
+    for (int j=0; j<i-1; j++)
         pCur=pCur->pNext;
     pNew->pNext=pCur->pNext;
     pCur->pNext=pNew;
@@ -261,7 +261,6 @@ int L1List<T>::remove(int i)
         pCur=pCur->pNext;
     L1Item<T> *pTmp=pCur->pNext;
     pCur->pNext=pCur->pNext->pNext;
-    delete pTmp;
     _size--;
 }
 template <class T>
@@ -270,10 +269,12 @@ int L1List<T>::remove_id(int id)
     if (isEmpty())
         return -1;
 	L1Item<T> *pCur=_pHead;
+	L1Item<T> *pPreCur=_pHead;
 	while (pCur)
     {
 		if (pCur->data==id)
 			break;
+        pPreCur=pCur;
 		pCur=pCur->pNext;
 	}
 	if (!pCur)
@@ -288,9 +289,8 @@ int L1List<T>::remove_id(int id)
         removeLast();
         return 0;
     }
-    L1Item<T> *pTmp=pCur->pNext;
-    pCur->pNext=pCur->pNext->pNext;
-    delete pTmp;
+    L1Item<T> *pTmp=pPreCur->pNext;
+    pPreCur->pNext=pPreCur->pNext->pNext;
     _size--;
 }
 
@@ -359,7 +359,6 @@ int L1List<T>::removeHead()
         return 0;
     L1Item<T> *pCur=_pHead;
     _pHead=_pHead->pNext;
-    delete pCur;
     _size--;
     return -1;
 }
@@ -375,7 +374,6 @@ int L1List<T>::removeLast()
     L1Item<T> *pCur=_pHead;
     for(int i=1; i<_size-1; i++)
         pCur=pCur->pNext;
-    delete pCur->pNext;
     pCur->pNext=NULL;
     _size--;
     return -1;

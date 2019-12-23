@@ -32,7 +32,13 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="dbLib.cpp" />
+		<Unit filename="dbLib.h" />
+		<Unit filename="dsaLib.h" />
+		<Unit filename="input.txt" />
 		<Unit filename="main.cpp" />
+		<Unit filename="processData.cpp" />
+		<Unit filename="processData.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
