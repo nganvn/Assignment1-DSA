@@ -1,0 +1,48 @@
+# depslib dependency file v1.0
+1576932132 source:c:\191\dsa\as1\dblib.cpp
+	"dbLib.h"
+
+1576932134 c:\191\dsa\as1\dblib.h
+	<iostream>
+	<fstream>
+	<iomanip>
+	<string>
+	<cstring>
+	<sstream>
+	<math.h>
+	"dsaLib.h"
+
+1577017951 c:\191\dsa\as1\dsalib.h
+	<string>
+	<stdio.h>
+	<string.h>
+	<iostream>
+
+1576932140 source:c:\191\dsa\as1\main.cpp
+	<iostream>
+	<fstream>
+	<iomanip>
+	<string>
+	<cstring>
+	<sstream>
+	<math.h>
+	"dsaLib.h"
+	"dbLib.h"
+	"processData.h"
+
+1576932142 c:\191\dsa\as1\processdata.h
+	<iostream>
+	<cstdio>
+	<cstdlib>
+	<cmath>
+	<iomanip>
+	<string>
+	<cstring>
+	<sstream>
+	<fstream>
+	<cassert>
+
+1577017923 source:c:\191\dsa\as1\processdata.cpp
+	"processData.h"
+	"dbLib.h"
+
