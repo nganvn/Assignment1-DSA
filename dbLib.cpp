@@ -26,10 +26,18 @@ void ReleaseData(void* &pData)
 
 string getCell(string &str)
 {
-    string s="";
+    char keyCheck = ',';
     int i=0;
-    while (str[i]!=','&&str[i]!='\0')
+    if (str[0]=='"')
+    {
+        keyCheck = '"';
+        i=1;
+    }
+    string s="";
+    while (str[i]!=keyCheck && str[i]!='\0')
         s.push_back(str[i++]);
+    if (keyCheck=='"')
+        i++;
     if (str[i]=='\0')
         i--;
     str.erase(0,i+1);
@@ -37,15 +45,8 @@ string getCell(string &str)
 }
 void ignoreCell(string &str,int numberCell)
 {
-
-    int i=0;
-    while (str[i]!='\0')
-        if (str[i++]==',')
-            if (--numberCell==0)
-                break;
-    if (str[i]=='\0')
-        i--;
-    str.erase(0,i);
+    for (int i=0;i<numberCell;i++)
+        getCell(str);
 }
 
 void TDataset::loadData_tCity()

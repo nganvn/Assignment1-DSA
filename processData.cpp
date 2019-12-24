@@ -153,6 +153,11 @@ void ProcessRequest(const char* pRequest, void* pData, void* &pOutput, int &N) {
         int track_id=stoi(getString(pRequest,' '));
 		TStation *tmpStation=tmpData->_tStation.findT(station_id);
         TTrack *tmpTrack=tmpData->_tTrack.findT(track_id);
+        if (!tmpStation||!tmpTrack)
+        {
+            pOutput=new int(-1);
+            return;
+        }
         int pos=tmpTrack->geometry.find(tmpStation->geometry);
         if (pos==-1)
             pOutput=new int(pos);
@@ -207,6 +212,8 @@ void ProcessRequest(const char* pRequest, void* pData, void* &pOutput, int &N) {
 			tmp.pop_back();
 			tmp.erase(0,6);
 			tmpS->geometry=tmp;
+			ignoreCell(csv_description,3);
+			tmpS->city_id=stoi(getCell(csv_description));
 			pOutput=new int(0);
 		}
         return;
