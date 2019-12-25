@@ -60,6 +60,8 @@ string getString(const char*& str,char tmp)
     string output="";
 	while (*str!= ' '&&*str!='\0')
         output+=*str++;
+    if (*str=='\0')
+        str--;
     str++;
     return output;
 }
@@ -118,6 +120,8 @@ void ProcessRequest(const char* pRequest, void* pData, void* &pOutput, int &N) {
     }
     if (req=="LSL")
     {
+        if (*pRequest=='\0')
+            return;
         void * tmp=new int (stoi(pRequest)); //line id
         N=tmpData->_tStation_line.traverse(find_lineId_stationId,tmp);
         pOutput=tmp;
@@ -125,6 +129,8 @@ void ProcessRequest(const char* pRequest, void* pData, void* &pOutput, int &N) {
     }
     if (req=="FC")
     {
+        if (*pRequest=='\0')
+            return;
         void * tmp=new string(pRequest);//city name
         int count = tmpData->_tCity.traverse(find_cityName_cityID,tmp);
         if (count == 0)
@@ -149,7 +155,11 @@ void ProcessRequest(const char* pRequest, void* pData, void* &pOutput, int &N) {
     }
     if (req=="SLP")
     {
+        if (*pRequest=='\0')
+            return;
         int station_id=stoi(getString(pRequest,' '));
+        if (*pRequest=='\0')
+            return;
         int track_id=stoi(getString(pRequest,' '));
 		TStation *tmpStation=tmpData->_tStation.findT(station_id);
         TTrack *tmpTrack=tmpData->_tTrack.findT(track_id);
@@ -187,6 +197,8 @@ void ProcessRequest(const char* pRequest, void* pData, void* &pOutput, int &N) {
     }
     if (req=="RS")
     {
+        if (*pRequest=='\0')
+            return;
 		int station_id=stoi(pRequest);
 		int tmp=tmpData->_tStation.remove_id(station_id);
 		if (tmp==-1)
@@ -200,6 +212,8 @@ void ProcessRequest(const char* pRequest, void* pData, void* &pOutput, int &N) {
     }
     if (req=="US")
     {
+        if (*pRequest=='\0')
+            return;
 		int station_id=stoi(getString(pRequest,' '));
 		string csv_description=pRequest;
 		TStation *tmpS=tmpData->_tStation.findT(station_id);
@@ -220,15 +234,19 @@ void ProcessRequest(const char* pRequest, void* pData, void* &pOutput, int &N) {
     }
     if (req=="ISL")
     {
+        if (*pRequest=='\0')
+            return;
 		int station_id=stoi(getString(pRequest,' '));
+		if (*pRequest=='\0')
+            return;
 		int line_id=stoi(getString(pRequest,' '));
+		if (*pRequest=='\0')
+            return;
 		int p_i=stoi(getString(pRequest,' '));
 		void * tmp=new int (line_id); //line id
-
 		TStation_line tmpSL;
         tmpSL.station_id=station_id;
         tmpSL.line_id=line_id;
-
         int count=tmpData->_tStation_line.traverse(find_lineId_stationId,tmp);
         if (count == 0 && p_i == 0)
         {
@@ -262,7 +280,11 @@ void ProcessRequest(const char* pRequest, void* pData, void* &pOutput, int &N) {
     }
     if (req=="RSL")
     {
+        if (*pRequest=='\0')
+            return;
         int station_id=stoi(getString(pRequest,' '));
+        if (*pRequest=='\0')
+            return;
         int line_id=stoi(getString(pRequest,' '));
         TStation_line tmp;
         tmp.station_id=station_id;
